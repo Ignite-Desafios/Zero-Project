@@ -15,6 +15,7 @@ import { formatDate } from '../../utils/formatDate';
 
 interface Post {
   first_publication_date: string | null;
+  uid: string;
   data: {
     title: string;
     banner: {
@@ -49,7 +50,7 @@ export default function Post({post}: PostProps) {
     return prev + headLenght + bodyLenght;
   }, 0);
 
-  const readTimingMinutes = Math.ceil(wordCount / 200) + " Min"
+  const readTimingMinutes = Math.ceil(wordCount / 200) + " min"
 
   
 
@@ -131,10 +132,10 @@ export const getStaticProps: GetStaticProps = async ({params}) => {
 
   const post: Post = {
     first_publication_date: response.first_publication_date,
-    data: {
-      ...response.data
-    }
+    data: response.data,
+    uid: response.uid,
   }
+  console.log(post)
 
   return {
     props: {
