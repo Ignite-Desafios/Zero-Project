@@ -1,7 +1,17 @@
 # Project: Zero Start React APP
 
-### Notion:
-* [Link](https://www.notion.so/Desafio-01-Criando-um-projeto-do-zero-b1a3645d286b4eec93f5f1f5476d0ff7)
+
+<p align="center">
+    <img 
+    src="./public/logo.svg"
+    width="60%"
+    />
+</p>
+    
+
+### Notion: [Link](https://www.notion.so/Desafio-01-Criando-um-projeto-do-zero-b1a3645d286b4eec93f5f1f5476d0ff7)
+
+### Figma: [Link](https://www.figma.com/file/yJZDLP1J6VWhTs1c2K3KgT/Desafios-M%C3%B3dulo-3-ReactJS-(Copy)?node-id=0%3A1)
 
 ### Comandos Utilizados:
 
@@ -14,7 +24,9 @@
   ```
 
 
+### Notas:
 
+* Apesar da aplicação estar funcionando, os testes necessitam de uma atenção, ou seja, mesmo funcionando, os testes falham, então exige fazer a aplicação de acordo com o teste.
 
 ## Prismic Settings:
 
