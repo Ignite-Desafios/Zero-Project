@@ -1,1 +1,28 @@
 // TODO
+.contentWrapper {
+  max-width: 1120px;
+  margin: 0 auto;
+
+}
+
+.infoSession {
+  display: flex;
+  align-items: center;
+  // justify-content: center;
+  
+  span {
+    display: flex;
+    align-items: center;
+    margin-right: 1rem;
+
+    font-size: .85rem;
+    color: var(--info);
+    font-weight: normal;
+
+    svg {
+      height: 1.2rem;
+      width: 1.2rem;
+      margin-right: .3rem;
+    }
+  }
+}

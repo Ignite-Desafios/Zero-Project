@@ -1,1 +1,21 @@
-// TODO
+
+.headerContainer {
+  position: fixed;
+  z-index: 100;
+  background: #1a1d23de;
+  width: 100vw;
+  backdrop-filter: saturate(180%) blur(36px);
+  border-bottom: 2px solid var(--highlight);
+  padding: 2rem;
+
+
+  img {
+    transition: filter .4s;
+
+    &:hover {
+      cursor: pointer;
+      filter: brightness(5);
+    }
+  }
+  
+}
