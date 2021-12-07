@@ -11,7 +11,8 @@ import { format } from 'date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
 
 import { FiCalendar, FiUser } from "react-icons/fi";
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import { formatDate } from '../utils/formatDate';
 
 
 interface Post {
@@ -33,7 +34,15 @@ interface HomeProps {
   postsPagination: PostPagination;
 }
 
-
+function parseResult(result: any[]): Post[] {
+  return result.map(post => ({
+    uid: post.uid,
+    first_publication_date: post.first_publication_date,
+    data: {
+      ...post.data,
+    },
+  }));
+}
 
 export default function Home({postsPagination}: HomeProps) {
   // TODO
@@ -50,7 +59,7 @@ export default function Home({postsPagination}: HomeProps) {
 
     setPostItens({
       next_page: response.next_page,
-      results: [...postItens.results, ...response.results]
+      results: [...postItens.results, ...parseResult(response.results)]
     });
   }
 
@@ -70,7 +79,7 @@ export default function Home({postsPagination}: HomeProps) {
                   </Link>
                   <p>{post.data.subtitle}</p>
                   <div className={commonStyles.infoSession}>
-                    <span><FiCalendar/>{post.first_publication_date}</span>
+                    <span><FiCalendar/>{formatDate(post.first_publication_date)}</span>
                     <span><FiUser/>{post.data.author}</span>
                   </div>
                 </li>
@@ -94,34 +103,21 @@ export const getStaticProps: GetStaticProps = async () => {
   const postsResponse = await prismic.query([
     Prismic.predicates.at("document.type", "posts")
   ], {
+    fetch: ["title", "subtitle", "author"],
     pageSize: 2
   });
 
-  const pagination: PostPagination = {
-    next_page: postsResponse.next_page,
-    results: postsResponse.results.map(result => {
-      const publicationDate = format(
-        new Date(result.first_publication_date),
-        "dd MMM yyyy",
-        {
-          locale: ptBR,
-        }
-      )
 
-      return {
-        uid: result.uid,
-        first_publication_date: publicationDate,
-        data: result.data,
-      }
-    })
-    
-  }
-
-
-  // console.log(postsResponse)
+  const posts: Post[] = parseResult(postsResponse.results);
 
   return {
-    props: {postsPagination: pagination}
-  }
+    revalidate: 60 * 60, // 1 hora
+    props: {
+      postsPagination: {
+        results: posts,
+        next_page: postsResponse.next_page,
+      },
+    },
+  };
   // TODO
 };

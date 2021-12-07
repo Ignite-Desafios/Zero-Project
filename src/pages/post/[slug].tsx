@@ -10,6 +10,8 @@ import Prismic from "@prismicio/client";
 import Head from "next/head";
 import styles from './post.module.scss';
 import { useRouter } from 'next/router';
+import { RichText } from 'prismic-dom';
+import { formatDate } from '../../utils/formatDate';
 
 interface Post {
   first_publication_date: string | null;
@@ -65,7 +67,6 @@ export default function Post({post}: PostProps) {
   }
 
   return (
-    <>
     <main className={styles.container}>
       <div className={commonStyles.contentWrapper}>
         <article>
@@ -77,7 +78,7 @@ export default function Post({post}: PostProps) {
 
           <h1>{post.data.title}</h1>
           <div className={commonStyles.infoSession}>
-            <span><FiCalendar/>{post.first_publication_date}</span>
+            <span><FiCalendar/>{formatDate(post.first_publication_date)}</span>
             <span><FiUser/>{post.data.author}</span>
             <span><FiClock/>{readTimingMinutes}</span>
           </div>
@@ -85,9 +86,7 @@ export default function Post({post}: PostProps) {
           {post.data.content.map((content, i) => (
             <div className={styles.group} key={content.heading || i}>
               <h2>{content.heading}</h2>
-              {content.body.map((text, x) => (
-                <p key={text.text || `${i}${x}`}>{text.text}</p>
-              ))}
+              <div dangerouslySetInnerHTML={{ __html: RichText.asHtml(content.body)}}/>
             </div>
           ))}
 
@@ -97,7 +96,6 @@ export default function Post({post}: PostProps) {
 
       </div>
     </main>
-    </>
   )
 }
 
@@ -127,33 +125,21 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 export const getStaticProps: GetStaticProps = async ({params}) => {
-  try {
-    const prismic = getPrismicClient();
-    const response = await prismic.getByUID("posts", String(params.slug), {});
-    const publicationDate = format(
-      new Date(response.first_publication_date),
-      "dd MMM yyyy",
-      {
-        locale: ptBR,
-      }
-    )
+  const { slug } = params
+  const prismic = getPrismicClient();
+  const response = await prismic.getByUID("posts", slug as string, {});
 
-    const post: Post = {
-      first_publication_date: publicationDate,
-      data: response.data
+  const post: Post = {
+    first_publication_date: response.first_publication_date,
+    data: {
+      ...response.data
     }
+  }
 
-    return {
-      props: {
-        post: post
-      }
-    }
-  } catch {
-    return {
-      redirect: {
-        destination: "/",
-        permanent: false
-      }
-    }
+  return {
+    props: {
+      post: post
+    },
+    revalidate: 60 * 60 * 5
   }
 };
