@@ -8,7 +8,7 @@ export default function Header() {
     <header className={styles.headerContainer}>
       <div className={commonStyles.contentWrapper}>
         <Link href="/">
-          <img src="/images/Logo.svg" alt="logo" />
+          <img src="/Logo.svg" alt="logo" />
         </Link>
 
       </div>

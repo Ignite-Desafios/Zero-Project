@@ -15,13 +15,6 @@
 
 
 
-## To-Do:
-
- função de leitura
- testar mensagem de fallback 'carregando'
-
-
-
 
 ## Prismic Settings:
 

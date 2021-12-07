@@ -40,10 +40,6 @@ export default function Home({postsPagination}: HomeProps) {
   const [postItens, setPostItens ] = useState<PostPagination>(postsPagination) 
   
 
-  useEffect(() => {
-
-  }, [postItens])
-
   async function handleLoadMorePosts(){
     if(!postsPagination.next_page) {
       return;
@@ -56,8 +52,6 @@ export default function Home({postsPagination}: HomeProps) {
       next_page: response.next_page,
       results: [...postItens.results, ...response.results]
     });
-
-    console.log(response)
   }
 
   return (
